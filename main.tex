@@ -1,0 +1,72 @@
+\documentclass{amsart}
+
+\usepackage[asy, graphs]{amogus}
+
+\pgfplotsset{ticks=none}
+
+\title{Lecture Notes---Fourier series}
+\author{Edward Wang}
+
+\begin{document}
+  \maketitle
+  We now look at some applications of Fourier series. First, we investigate the problem of a vibrating string.
+
+  \section{Wave Equation in One Dimension}
+
+  Consider a string of length $L$ lying on the $x$-axis, fixed at 2 ends: the origin $(0, 0)$ and $(L, 0)$. We will make some reasonable assumptions:
+  \begin{itemize}
+    \item The particles in the string move only up and down (there is no horizontal movement)
+    \item The string is perfectly elastic
+  \end{itemize}Let the function $u(x, t)$ describe the displacement of the string at time $t$.
+  \begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+      \begin{axis}[axis lines = left, width = \columnwidth, height = 5cm, ymax = 1, xmax = pi+0.3, clip = false, smooth]
+        \addplot[domain = 0:pi] {0.5*sin(deg(x))};
+        \draw (0, 0.9) node[right] {$u(x, t)$};
+        \draw (pi+0.25, 0) node[above] {$x$};
+        \draw[fill=black] (pi, 0) circle (2pt) node[below] {$(L, 0)$};
+        \draw[fill=black] (0, 0) circle (2pt) node[below] {$(0, 0)$};
+      \end{axis}
+    \end{tikzpicture}
+    \caption{A possible shape of the string at some point in time}
+  \end{figure}
+  First, we find the mass of the string in some interval $[a, b]$. Let  $\rho(x, t)$ describe the density of the string at  $x$ at time $t$. Focus on a tiny segment of the string at $x$.
+  \begin{figure}[H]
+    \begin{tikzpicture}
+      \draw[very thick] (2, 1) -- (8, 3);
+      \draw[dashed] (2, 1) -- (2, 0) node[below] {$x$} (8, 3) -- (8, 0) node[below] {$x + \Delta x$};
+      \draw[dashed] (2, 1) -- (8, 1) node[midway, below] {$\Delta x$}; 
+      \path(8, 3) -- (8, 1) node[midway, right] {$\Delta y$};
+      \draw[->] (0, 0) -- (10, 0);
+    \end{tikzpicture}
+  \end{figure}
+  Since this piece of string is so small, it approximates a straight line. Hence its length is clearly $\sqrt{\Delta x^2 + \Delta y^2} = \sqrt{1 + \big(\frac{\Delta y}{\Delta x}\big)^2}\Delta x$. Now the mass of this piece of string is simply $\rho(x, t)\sqrt{1 + \big(\frac{\Delta y}{\Delta x}\big)^2}\Delta x$. Imagine summing this $N$ times for all the tiny segments in the interval $[a, b]$. Thus an approximation of the mass of the string  in the interval $[a, b]$ is \[
+    \sum_{i=1}^{N} \rho(x, t)\sqrt{1 + \Big(\frac{\Delta y_i}{\Delta x_i}\Big)^2}\Delta x_i
+  .\] If these segments are equally spaced, then $\Delta x_i = \Delta x$. Our approximation becomes the true mass of the string when  $\Delta x$ approaches 0 and $N$ approaches $\infty$. Thus the mass of the string is \[
+  \lim_{N \to \infty} \lim_{\Delta x \to 0} \sum_{i=1}^{N} \rho(x, t)\sqrt{1 + \Big(\frac{\Delta y_i}{\Delta x}\Big)^2}\Delta x = \int_{a}^{b} \rho(x, t)\sqrt{1 + \Big(\frac{\partial u}{\partial x}\Big)^2}\, dx
+.\] For sake of brevity, we abbreviate $\frac{\partial u}{\partial x}$ to  $u_x$, and similarly, $\frac{\partial u}{\partial t}$ to $u_t$.
+
+Let us now concentrate on another small segment of the string in the interval $[x, x + \Delta x]$. This piece of string has mass \[
+  \int_{x}^{x+\Delta x} \rho(x, t)\sqrt{1 + u_x^2}\, dx  
+\] which we will call $m$.
+  \begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+      \begin{axis}[clip = false, ymin = 0, ymax = 1, height = 5cm, width = \columnwidth, axis lines = left, xmin = 0, xmax = pi/2 + 0.4]
+        \addplot[domain = 0.5 : pi/2-0.2, very thick] {sin(deg(x))};
+        \addplot[domain = 0.3 : 0.8, <-] {cos(deg(0.5)) * (x-0.5) + sin(deg(0.5))};
+        \addplot[domain = pi/2 - 0.5 : pi/2+0.1, ->] {cos(deg(pi/2 - 0.2)) * (x-pi/2 + 0.2) + sin(deg(pi/2 - 0.2))};
+        \addplot[domain = 0.3:pi/2] {0};
+        \filldraw (0.5, 0.479426) circle (1.5pt);
+        \filldraw (0.5, 0.479426) circle (1.5pt);
+        \filldraw (pi/2 - 0.2, 0.9800665) circle (1.5pt);
+        \draw[dashed] (0.5, 0.479426) -- (0.5, 0) node[below] {$x$} (0.5, 0.479426) -- (0.5+0.25, 0.479426);
+        \draw[dashed] (pi/2 - 0.2, 0.9800665) -- (pi/2 - 0.2, 0) node[below] {$x + \Delta x$} (pi/2 - 0.2, 0.9800665) -- (pi/2 - 0.2 + 0.25, 0.9800665);
+        \draw (0.5+0.1, 0.479426) arc(0:41.27:0.1) node[midway, right, xshift = 3pt, yshift = 3pt] {$\theta_x$};
+        \draw (pi/2 - 0.2 + 0.1, 0.9800665) arc(0:11.24:0.1) node[below right] {$\theta_{x + \Delta x}$};
+      \end{axis}
+    \end{tikzpicture}
+    \caption{}
+  \end{figure}
+\end{document}
