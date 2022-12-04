@@ -6,6 +6,19 @@
 
 \title{Lecture Notes---Fourier series}
 \author{Edward Wang}
+\date{\today}
+
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd{\@maketitle}
+  {\ifx\@empty\@dedicatory}
+  {\ifx\@empty\@date \else {\vskip3ex \centering\scshape\MakeLowercase{\@date}\par}\fi
+   \ifx\@empty\@dedicatory}
+  {}{}
+\patchcmd{\@adminfootnotes}
+  {\ifx\@empty\@date\else \@footnotetext{\@setdate}\fi}
+  {}{}{}
+\makeatother
 
 \begin{document}
   \maketitle
@@ -145,12 +158,12 @@
   Since this piece of string is so small, it approximates a straight line. Hence its length is clearly $\sqrt{\Delta x^2 + \Delta y^2} = \sqrt{1 + \big(\frac{\Delta y}{\Delta x}\big)^2}\Delta x$. Now the mass of this piece of string is simply $\rho(x, t)\sqrt{1 + \big(\frac{\Delta y}{\Delta x}\big)^2}\Delta x$. Imagine summing this $N$ times for all the tiny segments in the interval $[a, b]$. Thus an approximation of the mass of the string  in the interval $[a, b]$ is \[
     \sum_{i=1}^{N} \rho(x, t)\sqrt{1 + \Big(\frac{\Delta y_i}{\Delta x_i}\Big)^2}\Delta x_i
   .\] If these segments are equally spaced, then $\Delta x_i = \Delta x$. Our approximation becomes the true mass of the string when  $\Delta x$ approaches 0 and $N$ approaches $\infty$. Thus the mass of the string is \[
-  \lim_{N \to \infty} \lim_{\Delta x \to 0} \sum_{i=1}^{N} \rho(x, t)\sqrt{1 + \Big(\frac{\Delta y_i}{\Delta x}\Big)^2}\Delta x = \int_{a}^{b} \rho(x, t)\sqrt{1 + \Big(\frac{\partial u}{\partial x}\Big)^2}\, dx
+  \lim_{\substack{N \to \infty \\ \Delta x \to 0}} \sum_{i=1}^{N} \rho(x, t)\sqrt{1 + \Big(\frac{\Delta y_i}{\Delta x}\Big)^2}\Delta x = \int_{a}^{b} \rho(x, t)\sqrt{1 + \Big(\frac{\partial u}{\partial x}\Big)^2}\, dx
 .\] For sake of brevity, we abbreviate $\frac{\partial u}{\partial x}$ to  $u_x$, and similarly, $\frac{\partial u}{\partial t}$ to $u_t$.
 
 Let us now concentrate on another small segment of the string in the interval $[x, x + \Delta x]$. This piece of string has mass \[
-  \int_{x}^{x+\Delta x} \rho(x, t)\sqrt{1 + u_x^2}\, dx  
-\] which we will call $m$.
+  \int_{x}^{x+\Delta x} \rho(x, t)\sqrt{1 + u_x^2}\, dx.
+\] Let $m = \rho(x, t) \sqrt{1 + u_x^2} $ such that the mass is $\int_{x}^{x+\Delta x} m\, dx $.
   \begin{figure}[H]
     \centering
     \begin{tikzpicture}
@@ -170,4 +183,50 @@ Let us now concentrate on another small segment of the string in the interval $[
     \end{tikzpicture}
     \caption{}
   \end{figure}
+  Consider the tension forces $T_x$ and $T_{x+\Delta x}$ at $x$ and $x+\Delta x$ respectively. Since the net horizontal movement is 0, the sum of the horizontal components of the tension must be 0. This means that 
+  \begin{align*}
+    T_{x}\cos \theta_x &= T_{x+\Delta x}\cos \theta_{x+\Delta x} \\
+    T_{x+\Delta x} \cos \theta_{x + \Delta } - T_{x} \cos \theta_x &= 0.
+  \end{align*}
+  If we divide by $\Delta x$ and let $\Delta x \to 0$, by the definition of the derivative, we get
+  \begin{align*}
+    \lim_{\Delta x\to 0} \frac{T_{x+\Delta x} \cos \theta_{x + \Delta } - T_{x} \cos \theta_x}{\Delta x} &= 0 \\
+    \frac{\partial}{\partial x} T_x \cos \theta_x &= 0.
+  \end{align*}
+  Hence $T_x \cos \theta_x$ must be a constant, which we will call $\tau$.
+
+  Next, we consider the vertical tensional forces. We have 
+  \begin{align*}
+    \sum T = T_{x+\Delta x} \sin \theta_{x+\Delta x} - T_{x} \sin \theta_{x} &= \tau \Big(\frac{\sin \theta_{x+\Delta x}}{\cos \theta_{x+\Delta x}} - \frac{\sin \theta_x}{\cos \theta_x} \Big) \\
+                                                                             &= \tau (\tan \theta_{x + \Delta x} - \tan \theta_{x})
+  \end{align*}
+  Since $\tan \theta$ is simply the slope, we may replace it with $u_x$, giving us the net force \[
+    F = \tau (u_{x}(x+\Delta x, t) - u_{x}(x))
+  .\] 
+  We now have the force and the mass. We simply need the acceleration to apply Newton's second law. Thankfully, the acceleration is simply the second time derivative, $u_{tt}$. Applying Newton's second law, which states that $\sum F = ma$, we get:
+  \begin{equation}\label{eq1}
+    \tau (u_{x}(x+\Delta x, t) - u_{x}(x)) = \int_{x}^{x+\Delta x} mu_{tt}\, dx . 
+  \end{equation}
+  The Intermediate Value Theorem for integrals states that \[
+    \int_{a}^{b} f(x)\, dx = f(c)(b-a)
+  \] for some $c \in [a, b]$. We use this to simplify \ref{eq1}: 
+  \[
+    \tau (u_{x}(x+\Delta x, t) - u_{x}(x)) = mu_{tt}\Delta x
+  .\] We then divide by $\Delta x$ and let $\Delta \to 0$:
+  \begin{align*}
+    \tau \frac{u_x(x+\Delta x, t) - u_{x}(x, t)}{\Delta x} &= mu_{tt} \\
+    \tau u_{xx} &= mu_{tt}.
+  \end{align*}
+  If we define a constant $c = \sqrt{\frac{\tau}{m}} $, then we may rewrite the equation as \[
+    u_{tt} = c^2 u_{xx}
+  .\] This is the wave equation, in one spatial dimension.
+  \begin{definition}
+    The one-dimensional \emph{wave equation} is \[
+      u_{tt} = c^2u_{xx}
+    ,\] such that $u(x, t)$ describes the motion of a plucked string over time.
+  \end{definition}
+
+  \section{Solving the wave equation}
+
+  Some bollocks
 \end{document}
