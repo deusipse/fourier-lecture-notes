@@ -1,7 +1,7 @@
 \documentclass{amsart}
 
 \usepackage[asy, graphs]{amogus}
-
+\usepackage{bm}
 \pgfplotsset{ticks=none}
 
 \title{Lecture Notes---Fourier series}
@@ -32,11 +32,11 @@
   There are three important formulae concerning sines and cosines:
   \begin{theorem}[Orthogonality of sine and cosine]
     For integers $m, n$, the following identities hold:
-    \begin{align*}
+    \begin{align}
       &\int_{-\pi}^{\pi} \sin mx \sin nx\, dx = \begin{cases} 0, \quad m\neq n \\ \pi, \quad m = n \neq 0 \end{cases} \\
       &\int_{-\pi}^{\pi} \cos mx \cos nx\, dx = \begin{cases} 0, \quad m\neq n \\ \pi, \quad m = n \neq 0 \end{cases} \\
       &\int_{-\pi}^{\pi} \sin mx \cos nx\, dx = 0
-    \end{align*}
+    \end{align}
   \end{theorem}
   These identities may be proved using the product to sum trigonometric identities:
   \begin{align}
@@ -48,7 +48,7 @@
     We use \ref{trig1} to prove the first formula:
     \begin{align*}
       \int_{-\pi}^{\pi} \sin mx \sin nx\, dx &= \frac{1}{2} \int_{-\pi}^{\pi} \cos(x(m-n)) - \cos(x(m+n))\, dx \\
-                                             &= \frac{1}{2} \left[ \frac{\sin(x(m-n))}{m-n} - \frac{\sin(m+n)}{m+n} \right]_{-\pi}^{\pi}.
+                                             &= \frac{1}{2} \left[ \frac{\sin(x(m-n))}{m-n} - \frac{\sin(x(m+n))}{m+n} \right]_{-\pi}^{\pi}.
     \end{align*}
     Since $\sin k\pi = 0$ for any integer $k$, we have \[
       \int_{-\pi}^{\pi} \sin mx \sin nx \, dx = 0, \quad m\neq n
@@ -67,7 +67,47 @@
   \begin{equation}
     f(x) = \frac{a_0}{2} + \sum_{m=1}^{\infty} (a_m \cos mx + b_m \sin mx).
   \end{equation}
-  Let us assume that the series converges to $f$. We wish to calculate the coefficients $a_0, a_m, b_m$.
+  Let us assume that the series converges to $f$. We wish to calculate the coefficients $a_0, a_m, b_m$. 
+
+  First, consider multiplying $f(x)$ by $\cos nx$ and integrating from $-\pi$ to $\pi$:
+  \begin{align*}
+    \int_{-\pi}^{\pi} f(x) \cos nx \, dx = \frac{a_0}{2} \int_{-\pi}^{\pi} \cos nx \, dx &+ \sum_{m=1}^{\infty} a_m \int_{-\pi}^{\pi}\cos mx \cos nx \, dx \\ &+ \sum_{m=1}^{\infty} b_m \int_{-\pi}^{\pi} \sin mx \cos nx \, dx .
+  \end{align*}
+  Using the orthogonal relationships from earlier, we may simplify this to 
+  \begin{align*}
+    \int_{-\pi}^{\pi} f(x) \cos nx \, dx &= 0 + a_n \pi + 0\\
+    \bm{a_n} &\bm{= \frac{1}{\pi} \int_{-\pi}^{\pi} f(x) \cos nx \, dx} .
+  \end{align*}
+  Now we multiply $f(x)$ by $\sin nx$ and integrate from $-\pi$ to $\pi$:
+  \begin{align*}
+    \int_{-\pi}^{\pi} f(x) \sin nx \, dx = \frac{a_0}{2} \int_{-\pi}^{\pi} \sin nx \, dx &+ \sum_{m=1}^{\infty} a_m \int_{-\pi}^{\pi}\sin nx \cos mx \, dx \\ &+ \sum_{m=1}^{\infty} b_m \int_{-\pi}^{\pi} \sin mx \sin nx \, dx .
+  \end{align*}
+  Again, we simplify using the orthogonal relations:
+  \begin{align*}
+    \int_{-\pi}^{\pi} f(x) \sin nx\, dx &= 0 + 0 + b_n \pi \\
+    \bm{b_n} &= \bm{\frac{1}{\pi} \int_{-\pi}^{\pi} f(x) \sin nx\, dx}. 
+  \end{align*}
+
+  Finally, to determine $a_0$, we simply integrate from $-\pi$ to $\pi$:
+  \begin{align*}
+    \int_{-\pi}^{\pi} f(x)\, dx = \frac{a_0}{2} \int_{-\pi}^{\pi} \, dx &+ \sum_{m=1}^{\infty} a_m \int_{-\pi}^{\pi} \cos mx\, dx \\
+                                &+ \sum_{m=1}^{\infty} b_m \int_{-\pi}^{\pi} \sin mx\, dx 
+  \end{align*}
+  This time, we simply notice that $\int_{-\pi}^{\pi} \cos kx\, dx $ and $\int_{-\pi}^{\pi} \sin kx\, dx$ both equal zero. Hence, we obtain 
+  \begin{align*}
+    \int_{-\pi}^{\pi} f(x) \, dx &= a_0 \pi + 0 + 0 \\
+    \bm{a_0} &\bm{= \frac{1}{\pi} \int_{-\pi}^{\pi} f(x) \, dx} 
+  \end{align*}
+  \begin{definition}[Fourier series]
+    The \emph{Fourier series} of a function $f(x)$ that is $2\pi$ periodic on the closed interval  $[-\pi, \pi]$ is given by \[
+      f(x) = \frac{a_0}{2} + \sum_{m=1}^{\infty} (a_m \cos mx + b_m \sin mx)
+    ,\] where 
+    \begin{align*}
+      a_0 &= \int_{-\pi}^{\pi} f(x)\, dx \\
+      a_m &= \int_{-\pi}^{\pi} f(x)\cos mx\, dx \\
+      b_m &= \int_{-\pi}^{\pi} f(x)\sin mx\, dx.
+    \end{align*}
+  \end{definition}
 
 
   \section{Wave Equation in One Dimension}
