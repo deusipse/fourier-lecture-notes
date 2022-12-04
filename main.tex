@@ -9,9 +9,70 @@
 
 \begin{document}
   \maketitle
-  We now look at some applications of Fourier series. First, we investigate the problem of a vibrating string.
+  \tableofcontents
+  
+  \section{Introduction}
+
+  Fourier series have countless applications throughout applied mathematics and physics. Fourier series were first formally introduced by Joseph Fourier in his 1822 work \emph{Théorie analytique de la chaleur (Analytical theory of heat)} in order to solve the Heat Equation. Whilst this is not a history lesson, it is still important to know that Fourier series are rooted in physics and are commonly used to solve differential equations.
+
+  \section{Fourier series}
+
+  But what \emph{are} Fourier series? Despite sounding very fancy, the concept is very simple. The general concept of a Fourier series is to break a function down into a sum of sines and cosines. This is motivated by several reasons---they are easily differentiable, integrable, and manipulable.
+
+  For example, given some $2\pi$ periodic function $f(x)$, we can express it as some sum of sinusoidal waves like so:
+  \[
+    f(x) \approx \frac{a_0}{2} + \sum_{m=1}^{n} (a_m \cos mx + b_m \sin mx)
+  .\] If, as the number of terms $n$ approaches $\infty$, the approximation \emph{converges} to $f$, then the resulting sum is called a \emph{Fourier series}:
+  \[
+    f(x) = \frac{a_0}{2} + \sum_{m=1}^{\infty} (a_m \cos mx + b_m \sin mx)
+  .\] You will have noticed that there are some coefficients: $a_0, a_m, b_m$. These are the \emph{Fourier coefficients}, and determine how much of each sine wave of each frequency is included. Before we determine these coefficients, we first discuss the \emph{orthogonality relations} of the sine and cosine functions.
+
+  \section{Orthogonality of sine and cosine}
+
+  There are three important formulae concerning sines and cosines:
+  \begin{theorem}[Orthogonality of sine and cosine]
+    For integers $m, n$, the following identities hold:
+    \begin{align*}
+      &\int_{-\pi}^{\pi} \sin mx \sin nx\, dx = \begin{cases} 0, \quad m\neq n \\ \pi, \quad m = n \neq 0 \end{cases} \\
+      &\int_{-\pi}^{\pi} \cos mx \cos nx\, dx = \begin{cases} 0, \quad m\neq n \\ \pi, \quad m = n \neq 0 \end{cases} \\
+      &\int_{-\pi}^{\pi} \sin mx \cos nx\, dx = 0
+    \end{align*}
+  \end{theorem}
+  These identities may be proved using the product to sum trigonometric identities:
+  \begin{align}
+    \sin a \sin b &= \frac{1}{2}[\cos(a-b) - \cos(a+b)] \label{trig1}\\
+    \cos a \cos b &= \frac{1}{2} [\cos (a-b) + \cos(a+b)] \label {trig2}\\
+    \sin a \cos b &= \frac{1}{2}[\sin (a-b) + \sin(a+b)] \label{trig3}
+  \end{align}
+  \begin{proof}
+    We use \ref{trig1} to prove the first formula:
+    \begin{align*}
+      \int_{-\pi}^{\pi} \sin mx \sin nx\, dx &= \frac{1}{2} \int_{-\pi}^{\pi} \cos(x(m-n)) - \cos(x(m+n))\, dx \\
+                                             &= \frac{1}{2} \left[ \frac{\sin(x(m-n))}{m-n} - \frac{\sin(m+n)}{m+n} \right]_{-\pi}^{\pi}.
+    \end{align*}
+    Since $\sin k\pi = 0$ for any integer $k$, we have \[
+      \int_{-\pi}^{\pi} \sin mx \sin nx \, dx = 0, \quad m\neq n
+    .\] However, notice that the method only makes sense for $m\neq n$. If $m = n$, we may use the identity $\sin^2 a = \frac{1}{2}[1 - \cos(2a)]$ to obtain 
+    \begin{align*}
+      \int_{-\pi}^{\pi} \sin^2(mx)\, dx &= \frac{1}{2} \int_{-\pi}^{\pi} 1 - \cos(2mx)\, dx \\
+                                        &= \frac{1}{2} \left[ x - \frac{\sin (2mx)}{2m} \right]_{-\pi}^{\pi} \\
+                                        &= \pi
+    \end{align*}
+    The other two identities are left as an exercise to the reader.
+  \end{proof}
+
+  \section{Fourier Coefficients}
+
+  Recall the Fourier series of a $2\pi$ periodic function on $[-\pi, \pi]$, $f(x)$:
+  \begin{equation}
+    f(x) = \frac{a_0}{2} + \sum_{m=1}^{\infty} (a_m \cos mx + b_m \sin mx).
+  \end{equation}
+  Let us assume that the series converges to $f$. We wish to calculate the coefficients $a_0, a_m, b_m$.
+
 
   \section{Wave Equation in One Dimension}
+  
+  We now look at some applications of Fourier series. First, we investigate the problem of a vibrating string.
 
   Consider a string of length $L$ lying on the $x$-axis, fixed at 2 ends: the origin $(0, 0)$ and $(L, 0)$. We will make some reasonable assumptions:
   \begin{itemize}
