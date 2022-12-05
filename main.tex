@@ -2,7 +2,7 @@
 
 \usepackage[asy, graphs]{amogus}
 \usepackage{bm}
-\pgfplotsset{ticks=none}
+\pgfplotsset{ytick style={draw=none}, xtick style={draw=none}, xticklabels={,,}, yticklabels={,,}} % haven't bothered to find an efficient way to hide the stupid tick marks by default
 
 \title{Lecture Notes---Fourier series}
 \author{Edward Wang}
@@ -66,7 +66,7 @@
 
   \section{Fourier Coefficients}
 
-  Recall the Fourier series of a $2\pi$ periodic function on $[-\pi, \pi]$, $f(x)$:
+  Recall the Fourier series of $f(x)$, a $2\pi$ periodic function on $[-\pi, \pi]$:
   \begin{equation}
     f(x) = \frac{a_0}{2} + \sum_{m=1}^{\infty} (a_m \cos mx + b_m \sin mx).
   \end{equation}
@@ -106,16 +106,65 @@
       f(x) = \frac{a_0}{2} + \sum_{m=1}^{\infty} (a_m \cos mx + b_m \sin mx)
     ,\] where 
     \begin{align*}
-      a_0 &= \int_{-\pi}^{\pi} f(x)\, dx \\
-      a_m &= \int_{-\pi}^{\pi} f(x)\cos mx\, dx \\
-      b_m &= \int_{-\pi}^{\pi} f(x)\sin mx\, dx.
+      a_0 &= \frac{1}{\pi}\int_{-\pi}^{\pi} f(x)\, dx \\
+      a_m &= \frac{1}{\pi}\int_{-\pi}^{\pi} f(x)\cos mx\, dx \\
+      b_m &= \frac{1}{\pi}\int_{-\pi}^{\pi} f(x)\sin mx\, dx.
     \end{align*}
   \end{definition}
 
+  \section{Fourier series and the Basel Problem}
+
+  We now look at some applications of Fourier series. Let's go through an example of computing the Fourier series of a function.
+
+  Consider the function $f(x) = x$, which has been made periodic on the interval $[-\pi, \pi]$ so that it is $2\pi$ periodic. This just means that it repeats after $x = \pi$. We will calculate its Fourier coefficients.
+  \begin{figure}
+    \begin{tikzpicture}
+      \begin{axis}[axis lines = middle, domain = -3*pi : 3*pi, axis equal, ymax=pi, ymin = -pi, clip=false, xticklabels={$-2\pi$, $2\pi$}, xtick={-6.28318530718, 6.28318530718}, xtick style={draw}, width = \textwidth, height = 6cm]
+        \addplot[domain = -pi : pi] {x};
+        \addplot[domain = -3*pi : -pi] {x+2*pi};
+        \addplot[domain = pi: 3*pi] {x-2*pi};
+        \draw (0, pi) node[right] {$f(x)$};
+      \end{axis}
+    \end{tikzpicture}
+    \caption{Graph of $f(x)$}
+  \end{figure}
+  \begin{figure}
+    \begin{tikzpicture}
+      \begin{axis}[axis lines = middle, domain = -3*pi : 3*pi, axis equal, ymax=pi, ymin = -pi, clip=false, xticklabels={$-2\pi$, $2\pi$}, xtick={-6.28318530718, 6.28318530718}, xtick style={draw}, width = \textwidth, height = 6cm]
+    \addplot gnuplot[raw gnuplot, mark = none, black] {
+      set samples 200;      % final copy can have 1000 samples
+      set xrange[-3*pi:3*pi];
+      set yrange[-pi:pi];
+      fourier(x, k) = sin(k*x)*(-2*(-1)**k)/k;
+      series(x,n) = (n>0 ? fourier(x,n) + series(x,n-1) : 0);
+      plot[-3*pi:3*pi] series(x, 1);
+      plot[-3*pi:3*pi] series(x, 2);
+      plot[-3*pi:3*pi] series(x, 3);
+      plot[-3*pi:3*pi] series(x, 4);
+    };
+      \end{axis}
+    \end{tikzpicture}
+    \caption{Graphs of the first 4 partial sums}
+  \end{figure}
+  \begin{figure}
+    \begin{tikzpicture}
+      \begin{axis}[axis lines = middle, domain = -3*pi : 3*pi, axis equal, ymax=pi, ymin = -pi, clip=false, xticklabels={$-2\pi$, $2\pi$}, xtick={-6.28318530718, 6.28318530718}, xtick style={draw}, width = \textwidth, height = 6cm]
+    \addplot gnuplot[raw gnuplot, mark = none, black] {
+      set samples 200;             % final copy can have 10000 samples because it looks better :)
+      set xrange[-3*pi:3*pi];
+      set yrange[-pi:pi];
+      fourier(x, k) = sin(k*x)*(-2*(-1)**k)/k;
+      series(x,n) = (n>0 ? fourier(x,n) + series(x,n-1) : 0);
+      plot[-3*pi:3*pi] series(x, 100);
+    };
+      \end{axis}
+    \end{tikzpicture}
+    \caption{Graph of the 100th partial sum}
+  \end{figure}
 
   \section{Wave Equation in One Dimension}
   
-  We now look at some applications of Fourier series. First, we investigate the problem of a vibrating string.
+  We now investigate the problem of a vibrating string.
 
   Consider a string of length $L$ lying on the $x$-axis, fixed at 2 ends: the origin $(0, 0)$ and $(L, 0)$. We will make some reasonable assumptions:
   \begin{itemize}
