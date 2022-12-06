@@ -2,6 +2,7 @@
 
 \usepackage[asy, graphs]{amogus}
 \usepackage{bm}
+\fancyfoot[R]{}
 \pgfplotsset{ytick style={draw=none}, xtick style={draw=none}, xticklabels={,,}, yticklabels={,,}} % haven't bothered to find an efficient way to hide the stupid tick marks by default
 
 \title{Lecture Notes---Fourier series}
@@ -16,7 +17,7 @@
   
   \section{Introduction}
 
-  Fourier series have countless applications throughout applied mathematics and physics. Fourier series were first formally introduced by Joseph Fourier in his 1822 work \emph{Théorie analytique de la chaleur (Analytical theory of heat)} in order to solve the Heat Equation. Whilst this is not a history lesson, it is still important to know that Fourier series are rooted in physics and are commonly used to solve differential equations.
+  Fourier series have countless applications throughout applied mathematics and physics. Fourier series were first formally introduced by Joseph Fourier in his 1822 work \emph{Théorie analytique de la chaleur (Analytical theory of heat)} in order to solve the Heat Equation. Whilst this is not a history lesson, it is still important to know the origin of the Fourier series, which are rooted in physics and are commonly used to solve differential equations.
 
   \section{Fourier series}
 
@@ -24,8 +25,8 @@
 
   For example, given some $2\pi$ periodic function $f(x)$, we can express it as some sum of sinusoidal waves like so:
   \[
-    f(x) \approx \frac{a_0}{2} + \sum_{m=1}^{n} (a_m \cos mx + b_m \sin mx)
-  .\] If, as the number of terms $n$ approaches $\infty$, the approximation \emph{converges} to $f$, then the resulting sum is called a \emph{Fourier series}:
+    f(x) \approx \frac{a_0}{2} + \sum_{m=1}^{N} (a_m \cos mx + b_m \sin mx)
+  .\] If, as the number of terms $N$ approaches $\infty$, the approximation \emph{converges} to $f$, then the resulting sum is called a \emph{Fourier series}:
   \[
     f(x) = \frac{a_0}{2} + \sum_{m=1}^{\infty} (a_m \cos mx + b_m \sin mx)
   .\] You will have noticed that there are some coefficients: $a_0, a_m, b_m$. These are the \emph{Fourier coefficients}, and determine how much of each sine wave of each frequency is included. Before we determine these coefficients, we first discuss the \emph{orthogonality relations} of the sine and cosine functions.
@@ -36,9 +37,9 @@
   \begin{theorem}[Orthogonality of sine and cosine]
     For integers $m, n$, the following identities hold:
     \begin{align}
-      &\int_{-\pi}^{\pi} \sin mx \sin nx\, dx = \begin{cases} 0, \quad m\neq n \\ \pi, \quad m = n \neq 0 \end{cases} \\
-      &\int_{-\pi}^{\pi} \cos mx \cos nx\, dx = \begin{cases} 0, \quad m\neq n \\ \pi, \quad m = n \neq 0 \end{cases} \\
-      &\int_{-\pi}^{\pi} \sin mx \cos nx\, dx = 0
+      \int_{-\pi}^{\pi} \sin mx \sin nx\, dx &= \begin{cases} 0, \quad m\neq n \\ \pi, \quad m = n \neq 0 \end{cases} \\
+      \int_{-\pi}^{\pi} \cos mx \cos nx\, dx &= \begin{cases} 0, \quad m\neq n \\ \pi, \quad m = n \neq 0 \end{cases} \\
+      \int_{-\pi}^{\pi} \sin mx \cos nx\, dx &= 0.
     \end{align}
   \end{theorem}
   These identities may be proved using the product to sum trigonometric identities:
@@ -59,7 +60,7 @@
     \begin{align*}
       \int_{-\pi}^{\pi} \sin^2(mx)\, dx &= \frac{1}{2} \int_{-\pi}^{\pi} 1 - \cos(2mx)\, dx \\
                                         &= \frac{1}{2} \left[ x - \frac{\sin (2mx)}{2m} \right]_{-\pi}^{\pi} \\
-                                        &= \pi
+                                        &= \pi.
     \end{align*}
     The other two identities are left as an exercise to the reader.
   \end{proof}
@@ -94,12 +95,12 @@
   Finally, to determine $a_0$, we simply integrate from $-\pi$ to $\pi$:
   \begin{align*}
     \int_{-\pi}^{\pi} f(x)\, dx = \frac{a_0}{2} \int_{-\pi}^{\pi} \, dx &+ \sum_{m=1}^{\infty} a_m \int_{-\pi}^{\pi} \cos mx\, dx \\
-                                &+ \sum_{m=1}^{\infty} b_m \int_{-\pi}^{\pi} \sin mx\, dx 
+                                &+ \sum_{m=1}^{\infty} b_m \int_{-\pi}^{\pi} \sin mx\, dx.
   \end{align*}
   This time, we simply notice that $\int_{-\pi}^{\pi} \cos kx\, dx $ and $\int_{-\pi}^{\pi} \sin kx\, dx$ both equal zero. Hence, we obtain 
   \begin{align*}
     \int_{-\pi}^{\pi} f(x) \, dx &= a_0 \pi + 0 + 0 \\
-    \bm{a_0} &\bm{= \frac{1}{\pi} \int_{-\pi}^{\pi} f(x) \, dx} 
+    \bm{a_0} &\bm{= \frac{1}{\pi} \int_{-\pi}^{\pi} f(x) \, dx}. 
   \end{align*}
   \begin{definition}[Fourier series]
     The \emph{Fourier series} of a function $f(x)$ that is $2\pi$ periodic on the closed interval  $[-\pi, \pi]$ is given by \[
@@ -163,7 +164,7 @@
     \begin{tikzpicture}
       \begin{axis}[axis lines = middle, domain = -3*pi : 3*pi, axis equal, ymax=pi, ymin = -pi, clip=false, xticklabels={$-2\pi$, $2\pi$}, xtick={-6.28318530718, 6.28318530718}, xtick style={draw}, width = \textwidth, height = 6cm]
     \addplot gnuplot[raw gnuplot, mark = none, black] {
-      set samples 200;      % final copy can have 1000 samples
+      set samples 1000;      % final copy can have 1000 samples
       set xrange[-3*pi:3*pi];
       set yrange[-pi:pi];
       fourier(x, k) = sin(k*x)*(-2*(-1)**k)/k;
@@ -182,7 +183,7 @@
     \begin{tikzpicture}
       \begin{axis}[axis lines = middle, domain = -3*pi : 3*pi, axis equal, ymax=pi, ymin = -pi, clip=false, xticklabels={$-2\pi$, $2\pi$}, xtick={-6.28318530718, 6.28318530718}, xtick style={draw}, width = \textwidth, height = 6cm]
     \addplot gnuplot[raw gnuplot, mark = none, black] {
-      set samples 200;             % final copy can have 10000 samples because it looks better :)
+      set samples 10000;             % final copy can have 10000 samples because it looks better :)
       set xrange[-3*pi:3*pi];
       set yrange[-pi:pi];
       fourier(x, k) = sin(k*x)*(-2*(-1)**k)/k;
@@ -227,9 +228,16 @@
     This means that our Fourier series for $f(x) = x^2$ on $[-\pi, \pi]$ is \[
       f(x) = x^2 = \frac{\pi^2}{3} + \sum_{m=1}^{\infty} \frac{4(-1)^{m}}{m^2} \cos mx
     .\] 
-  \end{proof}
+  Let's now observe what happens when we plug in $x = \pi$. We get 
+  \begin{align*}
+    f(\pi) = \pi^2 &= \frac{\pi^2}{3} + \sum_{m=1}^{\infty} \frac{4(-1)^{m}}{m^2}\cos(m \pi) \\
+    \frac{2\pi^2}{3} &= \sum_{m=1}^{\infty} \frac{4}{m^2} .
+  \end{align*}
+  Dividing both sides by 4 yields the result that \[
+    \frac{\pi^2}{6} = \sum_{n=1}^{\infty} \frac{1}{n^2}. \qedhere
+  \] 
+\end{proof}
 
-  \newpage
   \section{Wave Equation in One Dimension}
   
   We now investigate the problem of a vibrating string.
@@ -305,7 +313,7 @@ Let us now concentrate on another small segment of the string in the interval $[
   Next, we consider the vertical tensional forces. We have 
   \begin{align*}
     \sum T = T_{x+\Delta x} \sin \theta_{x+\Delta x} - T_{x} \sin \theta_{x} &= \tau \Big(\frac{\sin \theta_{x+\Delta x}}{\cos \theta_{x+\Delta x}} - \frac{\sin \theta_x}{\cos \theta_x} \Big) \\
-                                                                             &= \tau (\tan \theta_{x + \Delta x} - \tan \theta_{x})
+                                                                             &= \tau (\tan \theta_{x + \Delta x} - \tan \theta_{x}).
   \end{align*}
   Since $\tan \theta$ is simply the slope, we may replace it with $u_x$, giving us the net force \[
     F = \tau (u_{x}(x+\Delta x, t) - u_{x}(x))
