@@ -112,11 +112,42 @@
     \end{align*}
   \end{definition}
 
-  \section{Fourier series and the Basel Problem}
+  \section{Using Fourier series}
+  \subsection{An example}
 
   We now look at some applications of Fourier series. Let's go through an example of computing the Fourier series of a function.
 
   Consider the function $f(x) = x$, which has been made periodic on the interval $[-\pi, \pi]$ so that it is $2\pi$ periodic. This just means that it repeats after $x = \pi$. We will calculate its Fourier coefficients.
+
+  We know that $a_0 = \frac{1}{\pi} \int_{-\pi}^{\pi} f(x) \, dx$. Since $f(x) = x$, we have 
+  \begin{align*}
+    a_0 &= \frac{1}{\pi} \int_{-\pi}^{\pi} x\, dx \\
+        &= \frac{1}{\pi} \left[ \frac{x^2}{2} \right]_{-\pi}^{\pi} \\
+        &= 0.
+  \end{align*}
+  Next, we calculate $a_m$:
+  \begin{equation*}
+    a_m = \frac{1}{\pi} \int_{-\pi}^{\pi} x\cos mx \, dx.
+  \end{equation*}
+  Notice $f(x) = x$ is an odd function, and $\cos mx$ is an even function. Therefore $x\cos mx$ is an odd function. When integrating an odd function with symmetric bounds, the result is always 0. Hence, $a_m = 0$.
+
+  Finally, we calculate $b_m$.
+  \begin{equation*}
+    b_m = \frac{1}{\pi}\int_{-\pi}^{\pi} x \sin mx \, dx .
+  \end{equation*}
+  This is a simple integration by parts exercise:
+  \begin{align*}
+    b_m &= \frac{1}{\pi} \left[ -\frac{x\cos mx}{m} + \frac{1}{m}\int \cos mx\, dx \right]_{-\pi}^{\pi} \\
+        &= \frac{1}{\pi} \left[ \frac{\sin mx - mx\cos mx}{m^2} \right]_{-\pi}^{\pi}.
+  \end{align*}
+  Notice that $\sin m\pi = 0$ for any integer $m$, and $\cos mx = (-1)^{m}$. Hence we have 
+  \begin{align*}
+    b_m &= \frac{1}{\pi} \left[ \frac{-2\pi m(-1)^{m}}{m^2} \right] \\
+        &= -\frac{2(-1)^{m}}{m}.
+  \end{align*}
+  This gives us the Fourier series \[
+    f(x) = - \sum_{m=1}^{\infty} \frac{2(-1)^m}{m} \sin mx
+  .\] The graphs of some partial sums are shown in Figures \ref{fig:2} and \ref{fig:3}.
   \begin{figure}
     \begin{tikzpicture}
       \begin{axis}[axis lines = middle, domain = -3*pi : 3*pi, axis equal, ymax=pi, ymin = -pi, clip=false, xticklabels={$-2\pi$, $2\pi$}, xtick={-6.28318530718, 6.28318530718}, xtick style={draw}, width = \textwidth, height = 6cm]
@@ -145,6 +176,7 @@
       \end{axis}
     \end{tikzpicture}
     \caption{Graphs of the first 4 partial sums}
+    \label{fig:2}
   \end{figure}
   \begin{figure}
     \begin{tikzpicture}
@@ -160,8 +192,44 @@
       \end{axis}
     \end{tikzpicture}
     \caption{Graph of the 100th partial sum}
+    \label{fig:3}
   \end{figure}
 
+  \subsection{The Basel Problem}
+
+  You may have heard of the Basel problem, an astonishing identity where $\pi$ seemingly randomly pops up. I will present a method of solving the problem using Fourier series.
+  \begin{theorem}[Basel problem]
+    \[
+      \sum_{n = 1}^{\infty} \frac{1}{n^2} = \frac{\pi^2}{6}
+    .\] 
+  \end{theorem}
+  \begin{proof}
+    Consider the function $f(x) = x^2$ which has been made periodic on the interval $[-\pi, \pi]$. We now find its Fourier series.
+
+    First, we calculate $a_0$:
+    \begin{align*}
+      a_0 &= \frac{1}{\pi} \int_{-\pi}^{\pi} x^2 \, dx \\
+          &= \frac{2}{\pi}\left[ \frac{x^3}{3} \right]_{0}^{\pi} \\
+          &= \frac{2\pi^2}{3}.
+    \end{align*}
+    Next, we calculate $a_m$, using integration by parts:
+    \begin{align*}
+      a_m &= \frac{1}{\pi} \int_{-\pi}^{\pi} x^2 \cos mx \, dx \\
+          &= \frac{1}{\pi} \left[ \frac{x^2 \sin mx}{m} - \frac{2}{m} \int x \sin mx \, dx \right]_{-\pi}^{\pi} .
+    \end{align*}
+    We can use our previous result that $\int_{-\pi}^{\pi} x \sin mx \, dx = -\frac{2\pi(-1)^{m}}{m}$ to get
+    \begin{align*}
+      a_m &= \frac{1}{\pi} \left[ \frac{x^2 \sin mx}{m} \right]_{-\pi}^{\pi} + \frac{2}{\pi m}\left[ \frac{2\pi(-1)^{m}}{m} \right] \\
+          &= \frac{4(-1)^{m}}{m^{2}}.
+    \end{align*}
+    To calculate $b_m$ we may notice that $x^2 \sin mx$ is odd, meaning that the symmetric integral will be 0. Hence, $b_m = 0$.
+
+    This means that our Fourier series for $f(x) = x^2$ on $[-\pi, \pi]$ is \[
+      f(x) = x^2 = \frac{\pi^2}{3} + \sum_{m=1}^{\infty} \frac{4(-1)^{m}}{m^2} \cos mx
+    .\] 
+  \end{proof}
+
+  \newpage
   \section{Wave Equation in One Dimension}
   
   We now investigate the problem of a vibrating string.
